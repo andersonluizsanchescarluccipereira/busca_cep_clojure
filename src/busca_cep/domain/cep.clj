@@ -24,5 +24,7 @@
 (defn format-cep
   "Formata '12345678' -> '12345-678'. Retorna nil se input inválido."
   [digits]
-  (when (and (string? digits) (= 8 (count digits)))
+  (when (and (string? digits)
+             (= 8 (count digits))
+             (re-matches #"^\d{8}$" digits))  ;; valida 8 dígitos
     (str (subs digits 0 5) "-" (subs digits 5 8))))

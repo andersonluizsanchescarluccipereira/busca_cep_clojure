@@ -1,17 +1,14 @@
 (ns busca-cep.adapters.via-cep
-  (:require
-   [clj-http.client :as http]
-   [cheshire.core :as json]
-   [busca-cep.ports.cep-port :as port]))
+  (:require [clj-http.client :as http]
+            [cheshire.core :as json]
+            [busca-cep.ports.cep-port :as port]))
 
-(defrecord ViaCepAdapter [base-url])
+(defn fetch-remote [cep]
+  (let [url (format "https://viacep.com.br/ws/%s/json" cep)
+        res (http/get url {:as :json-string-keys})]
+    (:body res)))
 
 (defn new-adapter []
-  (->ViaCepAdapter "https://viacep.com.br/ws"))
-
-(extend-type ViaCepAdapter
-  port/CepPort
-  (fetch-cep [_ cep]
-    (let [url (str (:base-url _) "/" cep "/json/")
-          res (http/get url {:as :json})]
-      (:body res))))
+  (reify port/CepPort
+    (fetch-cep [_ cep]
+      (fetch-remote cep))))
