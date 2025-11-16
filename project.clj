@@ -29,6 +29,11 @@
                  [integrant "0.8.0"]]
 
   ;; -------------------------
+  ;; PLUGINS
+  ;; -------------------------
+  :plugins [[lein-cloverage "1.2.4"]]
+
+  ;; -------------------------
   ;; ENTRYPOINT DO SISTEMA
   ;; -------------------------
   ;; Rodará a função -main em src/busca_cep/main.clj
