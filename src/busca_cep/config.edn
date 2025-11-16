@@ -1,0 +1,9 @@
+{:adapter/via-cep {}
+ :adapter/cache {:via-cep #ig/ref :adapter/via-cep}
+
+ :app/deps {:cache #ig/ref :adapter/cache}
+
+ :http/handler {:deps #ig/ref :app/deps}
+
+ :http/server {:handler #ig/ref :http/handler
+               :port 8080}}
