@@ -1,21 +1,28 @@
 (ns busca-cep.system
   (:require
    [busca-cep.adapters.via-cep :as via]
+   [busca-cep.adapters.dynamo-cache :as cache]
+   [busca-cep.infra.dynamo :as dynamo]
    [busca-cep.http.server :as server]))
 
 (defonce system-state (atom nil))
 
 (defn build-system []
-  {:adapter (via/new-adapter)    ;; << usando somente ViaCEP
-   :server  server/start!})
+  (let [real-adapter   (via/new-adapter)
+        dynamo-client  (dynamo/client)
+        cache-adapter  (cache/new-cache real-adapter
+                                        dynamo-client
+                                        "cep-cache")]
+    {:adapter cache-adapter
+     :server  server/start!}))
 
 (defn start! []
   (let [{:keys [adapter server]} (build-system)]
-    (server adapter)            ;; injeta o adapter no servidor HTTP
+    (server adapter)
     (reset! system-state {:adapter adapter})
-    (println "Sistema iniciado com ViaCEP")))
+    (println "Sistema iniciado com DynamoDB (LocalStack) + ViaCEP cacheado!")))
 
 (defn stop! []
-  (when-let [_ @system-state]
+  (when @system-state
     (reset! system-state nil)
     (println "Sistema parado")))

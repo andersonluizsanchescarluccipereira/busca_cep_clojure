@@ -12,17 +12,10 @@
         digits))))
 
 (defn valid-cep?
-  "Validação 'profissional' básica:
-   - aceita com ou sem hífen
-   - exatamente 8 dígitos
-   - retorna boolean"
   [cep]
   (boolean (and (string? cep)
                 (re-matches cep-regex cep))))
-
-;; Exemplo de função de negócio que poderia evoluir:
 (defn format-cep
-  "Formata '12345678' -> '12345-678'. Retorna nil se input inválido."
   [digits]
   (when (and (string? digits)
              (= 8 (count digits))

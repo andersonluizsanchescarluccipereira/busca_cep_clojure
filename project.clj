@@ -26,7 +26,9 @@
                  [cheshire "5.11.0"]
 
                  ;; Integrant para DI / Wiring
-                 [integrant "0.8.0"]]
+                 [integrant "0.8.0"]
+                 [software.amazon.awssdk/dynamodb "2.25.54"]
+                 [software.amazon.awssdk/url-connection-client "2.25.54"]]
 
   ;; -------------------------
   ;; PLUGINS
