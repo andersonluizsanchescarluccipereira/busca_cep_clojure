@@ -8,9 +8,9 @@
     (with-redefs [jetty/run-jetty
                   (fn [handler opts]
                     (reset! called {:handler handler :opts opts})
-                    (proxy [Object] []
+                    (proxy [org.eclipse.jetty.server.Server] []
                       (stop []
-                        (println "Mock stop called"))))]
+                        (println "Stop called"))))]
 
       (server/start! nil)
 

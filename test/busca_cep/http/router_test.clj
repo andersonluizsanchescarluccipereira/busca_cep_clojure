@@ -2,14 +2,22 @@
   (:require
    [clojure.test :refer :all]
    [busca-cep.http.router :as router]
-   [ring.mock.request :as mock]))
+   [ring.mock.request :as mock]
+   [cheshire.core :as json])
+  (:import (java.io ByteArrayInputStream)))
+
+(defn parse-json-body [response]
+  (let [body (:body response)]
+    (if (instance? ByteArrayInputStream body)
+      (json/parse-string (slurp body) true)
+      body)))
 
 (deftest status-route-test
   (let [handler (router/make-handler nil) ;; adapter não usado no /status
         request (mock/request :get "/status")
         response (handler request)]
     (is (= 200 (:status response)))
-    (is (= {:status "ok"} (:body response)))))
+    (is (= {:status "ok"} (parse-json-body response)))))
 
 (deftest cep-route-test
   (let [fake-adapter
@@ -24,4 +32,4 @@
         response (handler request)]
 
     (is (= 200 (:status response)))
-    (is (= {:cep "12345678" :logradouro "Rua Fake" :uf "SP"} (:body response)))))
+    (is (= {:cep "12345678" :logradouro "Rua Fake" :uf "SP"} (parse-json-body response)))))

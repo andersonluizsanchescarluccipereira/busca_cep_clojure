@@ -3,7 +3,9 @@
    [clojure.test :refer :all]
    [busca-cep.system :as system]
    [busca-cep.adapters.via-cep :as via]
-   [busca-cep.http.server :as server]))
+   [busca-cep.http.server :as server]
+   [busca-cep.adapters.dynamo-cache]))
+
 
 (deftest build-system-test
   (let [sys (system/build-system)]
@@ -18,7 +20,8 @@
 
     (with-redefs [via/new-adapter (fn [] adapter-dummy)
                   server/start! (fn [adapter]
-                                  (reset! server-called adapter))]
+                                  (reset! server-called adapter))
+                  busca-cep.adapters.dynamo-cache/new-cache (fn [adapter _ _] adapter)] ; mock cache to return adapter as is
       (system/start!)
       (is (= adapter-dummy @server-called))
       (is (= {:adapter adapter-dummy} @system/system-state)))))
