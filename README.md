@@ -62,6 +62,15 @@ O projeto está organizado da seguinte forma:
    ```
    Isso iniciará o LocalStack na porta 4566.
 
+   **Verifique se o LocalStack está funcionando** (health check do ambiente):
+   ```
+   curl http://localhost:4566/_localstack/health
+   ```
+   Resposta esperada (indica que o DynamoDB local está pronto):
+   ```json
+   {"dynamodb": "available"}
+   ```
+
 4. **Configure as variáveis de ambiente** (se necessário):
    - O projeto usa LocalStack por padrão. Se quiser usar AWS real, configure `AWS_ACCESS_KEY_ID` e `AWS_SECRET_ACCESS_KEY`.
 
@@ -84,7 +93,7 @@ java -jar target/uberjar/busca-cep-0.1.0-SNAPSHOT-standalone.jar
 
 Use o `curl` ou qualquer cliente HTTP para testar a API.
 
-### Verificar se o serviço está funcionando
+### Verificar se o serviço está funcionando (Health Check)
 ```
 curl http://localhost:3000/status
 ```
@@ -93,7 +102,7 @@ Resposta esperada:
 {"status": "ok"}
 ```
 
-### Consultar um CEP
+### Consultar um CEP válido
 ```
 curl http://localhost:3000/cep/01001000
 ```
@@ -113,8 +122,28 @@ Resposta esperada (exemplo):
 }
 ```
 
-- Substitua `01001000` por qualquer CEP válido (apenas números).
-- Se o CEP não existir, a API retornará um erro ou dados vazios.
+### Consultar um CEP inválido
+```
+curl http://localhost:3000/cep/00000000
+```
+Resposta esperada (erro):
+```json
+{
+  "erro": true
+}
+```
+
+### Consultar um CEP com formato incorreto
+```
+curl http://localhost:3000/cep/abc
+```
+Resposta esperada (erro, pois espera apenas números):
+```json
+{}
+```
+
+- Substitua o CEP nos exemplos por qualquer valor válido (apenas números, 8 dígitos).
+- O cache em DynamoDB acelera consultas repetidas do mesmo CEP.
 
 ## Testes
 
