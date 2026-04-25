@@ -142,6 +142,27 @@ Resposta esperada (erro, pois espera apenas números):
 {}
 ```
 
+### WebSocket para consulta em tempo real
+Conecte-se via WebSocket em `ws://localhost:3000/ws/cep` e envie o CEP como string para receber a resposta em tempo real.
+
+### SSE (Server-Sent Events) para consulta
+```
+curl http://localhost:3000/sse/cep/01001000
+```
+Recebe eventos SSE com os dados do CEP.
+
+### Webhook para integração
+Envie um POST com JSON `{"cep": "01001000"}` para `http://localhost:3000/webhook/cep` para receber a resposta.
+
+### gRPC
+Use um cliente gRPC conectando em `localhost:50051` com o serviço `CepService.FetchCep`.
+
+### Kafka com Avro
+Envie mensagens Avro para o tópico `cep-requests` e receba respostas no tópico `cep-responses`.
+
+### SOAP
+Acesse o WSDL em `http://localhost:8081/cep?wsdl` e faça chamadas SOAP.
+
 - Substitua o CEP nos exemplos por qualquer valor válido (apenas números, 8 dígitos).
 - O cache em DynamoDB acelera consultas repetidas do mesmo CEP.
 
