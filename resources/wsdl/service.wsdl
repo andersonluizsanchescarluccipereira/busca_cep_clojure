@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="CepService"
+             xmlns:tns="http://example.com/cep"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             targetNamespace="http://example.com/cep">
+
+  <types>
+    <xsd:schema targetNamespace="http://example.com/cep">
+      <xsd:element name="GetCepRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="cep" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="GetCepResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="cepInfo" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </types>
+
+  <message name="GetCepRequest">
+    <part name="parameters" element="tns:GetCepRequest"/>
+  </message>
+  <message name="GetCepResponse">
+    <part name="parameters" element="tns:GetCepResponse"/>
+  </message>
+
+  <portType name="CepPortType">
+    <operation name="GetCep">
+      <input message="tns:GetCepRequest"/>
+      <output message="tns:GetCepResponse"/>
+    </operation>
+  </portType>
+
+  <binding name="CepBinding" type="tns:CepPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="GetCep">
+      <soap:operation soapAction="GetCep"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <service name="CepService">
+    <port name="CepPort" binding="tns:CepBinding">
+      <soap:address location="http://localhost:3000/soap"/>
+    </port>
+  </service>
+
+</definitions>
+
