@@ -55,6 +55,18 @@ O projeto está organizado da seguinte forma:
    ```
    lein deps
    ```
+2.1 **Configure os Exports**:
+   ```
+export AWS_ACCESS_KEY_ID=test
+export AWS_SECRET_ACCESS_KEY=test
+export AWS_DEFAULT_REGION=us-east-1
+
+aws dynamodb create-table \  
+  --table-name cep \             
+  --attribute-definitions AttributeName=cep,AttributeType=S \
+  --key-schema AttributeName=cep,KeyType=HASH \
+  --billing-mode PAY_PER_REQUEST
+   ```
 
 3. **Inicie o LocalStack** (para DynamoDB local):
    ```
@@ -102,7 +114,7 @@ Resposta esperada:
 {"status": "ok"}
 ```
 
-### Consultar um CEP válido
+### Consultar um CEP válido (HTTP REST)
 ```
 curl http://localhost:3000/cep/01001000
 ```
@@ -142,29 +154,19 @@ Resposta esperada (erro, pois espera apenas números):
 {}
 ```
 
-### WebSocket para consulta em tempo real
-Conecte-se via WebSocket em `ws://localhost:3000/ws/cep` e envie o CEP como string para receber a resposta em tempo real.
-
-### SSE (Server-Sent Events) para consulta
-```
-curl http://localhost:3000/sse/cep/01001000
-```
-Recebe eventos SSE com os dados do CEP.
-
 ### Webhook para integração
-Envie um POST com JSON `{"cep": "01001000"}` para `http://localhost:3000/webhook/cep` para receber a resposta.
+Envie um POST com JSON `{"cep": "01001000"}` para `http://localhost:3000/webhook/cep`:
 
-### gRPC
-Use um cliente gRPC conectando em `localhost:50051` com o serviço `CepService.FetchCep`.
-
-### Kafka com Avro
-Envie mensagens Avro para o tópico `cep-requests` e receba respostas no tópico `cep-responses`.
-
-### SOAP
-Acesse o WSDL em `http://localhost:8081/cep?wsdl` e faça chamadas SOAP.
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"cep": "01001000"}' \
+  http://localhost:3000/webhook/cep
+```
 
 - Substitua o CEP nos exemplos por qualquer valor válido (apenas números, 8 dígitos).
 - O cache em DynamoDB acelera consultas repetidas do mesmo CEP.
+- A API usa a Arquitetura Hexagonal: HTTP REST e Webhooks compartilham o mesmo cache e lógica de negócio.
 
 ## Testes
 

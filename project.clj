@@ -25,24 +25,6 @@
                  ;; JSON
                  [cheshire "5.11.0"]
 
-                 ;; gRPC
-                 [io.grpc/grpc-core "1.50.0"]
-                 [io.grpc/grpc-protobuf "1.50.0"]
-                 [io.grpc/grpc-stub "1.50.0"]
-                 [com.google.protobuf/protobuf-java "3.21.7"]
-
-                 ;; Kafka
-                 [org.apache.kafka/kafka-clients "3.3.1"]
-
-                 ;; Avro
-                 [org.apache.avro/avro "1.11.1"]
-
-                 ;; WebSocket/SSE
-                 [aleph "0.4.7-alpha10"]  ;; for async HTTP, WebSocket, SSE
-
-                 ;; SOAP
-                 [org.apache.cxf/cxf-rt-frontend-jaxws "3.5.5"]
-                 [org.apache.cxf/cxf-rt-transports-http "3.5.5"]
 
                  ;; Integrant para DI / Wiring
                  [integrant "0.8.0"]
@@ -52,8 +34,7 @@
   ;; -------------------------
   ;; PLUGINS
   ;; -------------------------
-  :plugins [[lein-cloverage "1.2.4"]
-            [lein-protobuf "0.5.0"]]
+  :plugins [[lein-cloverage "1.2.4"]]
 
   ;; -------------------------
   ;; ENTRYPOINT DO SISTEMA
@@ -75,9 +56,5 @@
              :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}
 
    ;; Perfil de desenvolvimento (opcional)
-   :dev {:dependencies [[ring/ring-mock "0.4.0"]
-                        [integrant/repl "0.3.3"]
-                        [org.clojure/tools.namespace "1.4.5"]]}}
-
-  ;; Protobuf
-  :protobuf {:proto-path "resources" :java-out "src/java"})
+   :dev {:dependencies [[integrant/repl "0.3.3"]
+                        [org.clojure/tools.namespace "1.4.5"]]}})
