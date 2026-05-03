@@ -61,7 +61,7 @@ export AWS_ACCESS_KEY_ID=test
 export AWS_SECRET_ACCESS_KEY=test
 export AWS_DEFAULT_REGION=us-east-1
 
-aws dynamodb create-table \  
+aws --endpoint-url=http://localhost:4566 dynamodb create-table \  
   --table-name cep \             
   --attribute-definitions AttributeName=cep,AttributeType=S \
   --key-schema AttributeName=cep,KeyType=HASH \

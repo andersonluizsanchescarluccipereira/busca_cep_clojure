@@ -30,7 +30,6 @@
      ["/soap"
       {:post (fn [request]
                (let [xml (slurp (:body request))
-                     _ (println "SOAP REQUEST:" xml) ;; debug útil
                      cep (second (re-find #"<cep:cep>(.*?)</cep:cep>" xml))
                      result (port/fetch-cep adapter cep)]
                  {:status 200

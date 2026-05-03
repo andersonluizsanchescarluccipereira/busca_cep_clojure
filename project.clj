@@ -57,4 +57,10 @@
 
    ;; Perfil de desenvolvimento (opcional)
    :dev {:dependencies [[integrant/repl "0.3.3"]
-                        [org.clojure/tools.namespace "1.4.5"]]}})
+                        [org.clojure/tools.namespace "1.4.5"]
+                        [org.clojure/clojure "1.11.1"]
+                        [ring/ring-mock "0.4.0"]]
+         :plugins [[lein-cloverage "1.2.4"]]
+         :source-paths ["src" "test"]
+         :resource-paths ["resources"]
+         }})
